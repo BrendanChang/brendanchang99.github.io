@@ -1,5 +1,6 @@
 # brendanchang99.github.io
 
+
 My first data analysis case study 
 Coursera - Google Data Analytics Professional Certificates
 
