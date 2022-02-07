@@ -256,6 +256,20 @@ p1 + labs(title = "Minutes spent on every intensity level in a day", x = "intens
   annotate(geom = "text", x = "sedentary_minutes", y = 800, label =paste0(portion_sedentary, "%"))
 
 ```
+### Inferencial statistics - hypothesis testing (t-test)
+
+```{r}
+
+df1 <- melted_daily_activity %>% 
+  select(intensity_level, value) %>% 
+  filter(intensity_level == "very_active_minutes" | 
+           intensity_level == "sedentary_minutes")
+
+t.test(data = df1, value ~ intensity_level)
+
+```
+
+
 Conclusion: On average, respondent spent **85.83%** of a day in sedentary behavior.
 
 
@@ -268,9 +282,9 @@ Total Steps Taken vs Average intensity
 
 ```{r analyze & visualize Total Steps Taken vs Average intensity}
 
-corr1 <- round(cor(hourly_activity$average_intensity, hourly_activity$total_steps),4)
+corr1 <- round(cor(hourly_activity$average_intensity, hourly_activity$step_total),4)
 
-p2 <- hourly_activity %>%  ggplot(aes(x=average_intensity, y=total_steps))+
+p2 <- hourly_activity %>%  ggplot(aes(x=average_intensity, y=step_total))+
   geom_point()+geom_smooth()
 
 
@@ -306,9 +320,9 @@ Calories burned vs Total steps taken
 
 ```{r analyze & visualize Calories burned vs Total steps taken}
 
-corr3 <- round(cor(hourly_activity$total_steps, hourly_activity$calories),4)
+corr3 <- round(cor(hourly_activity$step_total, hourly_activity$calories),4)
 
-p4 <- hourly_activity %>%  ggplot(aes(x=total_steps, y=calories))+
+p4 <- hourly_activity %>%  ggplot(aes(x=step_total, y=calories))+
   geom_point()+geom_smooth()
 
 
@@ -419,8 +433,24 @@ p8 + labs(title = "Total minutes asleep vs Total time in bed", x = "Total time i
 ### Summary of findings:
  * **With more time on bed, people will fall asleep for more minutes. With good quality sleeping, the person will spend less minutes on sedentary behavior and take more distance.**
  * **With high intensity, high total steps taken and more distance taken, more calories will be burned as well**
- 
 
+ 
+ 
+### Linear regression (y = Sedentary minutes, x = total minutes asleep)
+
+```{r}
+
+summary(lm(data = combined_data, sedentary_minutes ~ total_minutes_asleep))
+
+
+```
+
+### Conclusions:
+ * **Causation implied.**
+ * **Total minutes asleep negatively affects sedentary behavior, On average, for 1 minutes increase in total minutes asleep, the minutes spent on sedentary behavior will decrease by 0.84 minutes**
+
+
+ 
 ### High-level recommendation:
  * **Add in new features to current smart device to track user's sleeping habits.**
  * **Design a dashboard specifying the impact of good quality sleeping, eg. how it affects your daily life using data.**
